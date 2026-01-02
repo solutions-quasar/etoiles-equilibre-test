@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paramètres - Admin</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .admin-sidebar {
+            position: fixed;
+            left: 0;
+            top: 70px;
+            width: 250px;
+            height: calc(100vh - 70px);
+            background: var(--text-dark);
+            color: white;
+            padding: 2rem 0;
+            overflow-y: auto;
+        }
+
+        .admin-content {
+            margin-left: 250px;
+            padding: 2rem;
+            min-height: calc(100vh - 70px);
+            padding-top: 100px;
+        }
+
+        .admin-sidebar-menu {
+            list-style: none;
+            padding: 0;
+        }
+
+        .admin-sidebar-menu li {
+            margin-bottom: 0.5rem;
+        }
+
+        .admin-sidebar-menu a {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1.5rem;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: all var(--transition-fast);
+        }
+
+        .admin-sidebar-menu a:hover,
+        .admin-sidebar-menu a.active {
+            background: var(--cosmic-purple);
+            color: white;
+        }
+
+        .settings-section {
+            margin-bottom: 2rem;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <div class="navbar-logo">⭐ Admin - Paramètres</div>
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <button id="logoutBtn" class="btn btn-secondary" style="padding: 0.5rem 1rem;">
+                    Déconnexion
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <aside class="admin-sidebar">
+        <ul class="admin-sidebar-menu">
+            <li><a href="index.html">
+                    <span>📊</span> Tableau de Bord
+                </a></li>
+            <li><a href="modules.html">
+                    <span>📚</span> Gestion Modules
+                </a></li>
+            <li><a href="users.html">
+                    <span>👥</span> Utilisateurs
+                </a></li>
+            <li><a href="consultations.html">
+                    <span>📹</span> Consultations
+                </a></li>
+            <li><a href="leads.html">
+                    <span>📧</span> Leads
+                </a></li>
+            <li><a href="payments.html">
+                    <span>💳</span> Paiements
+                </a></li>
+            <li><a href="blog.html">
+                    <span>✍️</span> Blog
+                </a></li>
+            <li><a href="settings.html" class="active">
+                    <span>⚙️</span> Paramètres
+                </a></li>
+        </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="admin-content">
+        <div class="container-wide">
+            <h1 style="margin-bottom: 2rem;">Paramètres de la Plateforme</h1>
+
+            <!-- Firebase Configuration -->
+            <div class="settings-section">
+                <div class="card">
+                    <h3
+                        style="padding: 1rem; border-bottom: 1px solid var(--gentle-gray); background: var(--gradient-cosmic-telluric); color: white; border-radius: var(--radius-md) var(--radius-md) 0 0;">
+                        🔥 Configuration Firebase
+                    </h3>
+                    <div style="padding: 2rem;">
+                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem;">
+                            <div>
+                                <p style="font-weight: 600; margin-bottom: 0.5rem;">Projet ID</p>
+                                <p style="color: var(--text-medium);">etoiles-equilibre</p>
+                            </div>
+                            <div>
+                                <p style="font-weight: 600; margin-bottom: 0.5rem;">Région</p>
+                                <p style="color: var(--text-medium);">us-central1</p>
+                            </div>
+                            <div>
+                                <p style="font-weight: 600; margin-bottom: 0.5rem;">Authentication</p>
+                                <p style="color: var(--healing-green);">✅ Activé</p>
+                            </div>
+                            <div>
+                                <p style="font-weight: 600; margin-bottom: 0.5rem;">Firestore</p>
+                                <p style="color: var(--healing-green);">✅ Activé</p>
+                            </div>
+                            <div>
+                                <p style="font-weight: 600; margin-bottom: 0.5rem;">Storage</p>
+                                <p style="color: var(--healing-green);">✅ Activé</p>
+                            </div>
+                            <div>
+                                <p style="font-weight: 600; margin-bottom: 0.5rem;">Analytics</p>
+                                <p style="color: var(--telluric-gold);">⚠️ À configurer</p>
+                            </div>
+                        </div>
+                        <a href="https://console.firebase.google.com/project/etoiles-equilibre" target="_blank"
+                            class="btn btn-primary" style="margin-top: 1.5rem;">
+                            🔗 Ouvrir Console Firebase
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Integrations -->
+            <div class="settings-section">
+                <div class="card">
+                    <h3 style="padding: 1rem; border-bottom: 1px solid var(--gentle-gray);">🔌 Intégrations</h3>
+                    <div style="padding: 2rem;">
+                        <div style="display: grid; gap: 1.5rem;">
+                            <div
+                                style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; border: 1px solid var(--gentle-gray); border-radius: var(--radius-md);">
+                                <div>
+                                    <h4 style="margin-bottom: 0.5rem;">💳 Stripe</h4>
+                                    <p style="color: var(--text-medium); font-size: 0.9rem;">Paiements en ligne</p>
+                                </div>
+                                <span style="color: var(--telluric-gold);">⚠️ Non configuré</span>
+                            </div>
+                            <div
+                                style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; border: 1px solid var(--gentle-gray); border-radius: var(--radius-md);">
+                                <div>
+                                    <h4 style="margin-bottom: 0.5rem;">📹 Google Meet</h4>
+                                    <p style="color: var(--text-medium); font-size: 0.9rem;">Consultations vidéo</p>
+                                </div>
+                                <span style="color: var(--telluric-gold);">⚠️ Non configuré</span>
+                            </div>
+                            <div
+                                style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; border: 1px solid var(--gentle-gray); border-radius: var(--radius-md);">
+                                <div>
+                                    <h4 style="margin-bottom: 0.5rem;">📧 Service Email</h4>
+                                    <p style="color: var(--text-medium); font-size: 0.9rem;">SendGrid / Mailchimp</p>
+                                </div>
+                                <span style="color: var(--telluric-gold);">⚠️ Non configuré</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Documentation Links -->
+            <div class="settings-section">
+                <div class="card">
+                    <h3 style="padding: 1rem; border-bottom: 1px solid var(--gentle-gray);">📚 Documentation</h3>
+                    <div style="padding: 2rem;">
+                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem;">
+                            <a href="../README.md" class="btn btn-secondary" style="text-align: center;">
+                                📄 README
+                            </a>
+                            <a href="../firestore-schema.md" class="btn btn-secondary" style="text-align: center;">
+                                🗄️ Schéma Firestore
+                            </a>
+                            <a href="../seo-strategy.md" class="btn btn-secondary" style="text-align: center;">
+                                📈 Stratégie SEO
+                            </a>
+                            <a href="https://github.com/solutions-quasar/etoiles-equilibre-test" target="_blank"
+                                class="btn btn-secondary" style="text-align: center;">
+                                🔗 GitHub Repository
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- System Info -->
+            <div class="settings-section">
+                <div class="card">
+                    <h3 style="padding: 1rem; border-bottom: 1px solid var(--gentle-gray);">ℹ️ Informations Système</h3>
+                    <div style="padding: 2rem;">
+                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem;">
+                            <div>
+                                <p style="font-weight: 600; margin-bottom: 0.5rem;">Version</p>
+                                <p style="color: var(--text-medium);">1.0.0</p>
+                            </div>
+                            <div>
+                                <p style="font-weight: 600; margin-bottom: 0.5rem;">Dernière Mise à Jour</p>
+                                <p style="color: var(--text-medium);">Janvier 2026</p>
+                            </div>
+                            <div>
+                                <p style="font-weight: 600; margin-bottom: 0.5rem;">Environnement</p>
+                                <p style="color: var(--text-medium);">Test</p>
+                            </div>
+                            <div>
+                                <p style="font-weight: 600; margin-bottom: 0.5rem;">Support</p>
+                                <p style="color: var(--text-medium);">contact@etoiles-equilibre.com</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="../js/main.js"></script>
+    <script type="module">
+        import { auth } from '../firebase-config.js';
+        import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+        document.addEventListener('DOMContentLoaded', function () {
+            onAuthStateChanged(auth, async (user) => {
+                if (!user) {
+                    window.location.href = '../connexion.html';
+                }
+            });
+
+            const logoutBtn = document.getElementById('logoutBtn');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', async function () {
+                    await signOut(auth);
+                    window.location.href = '../index.html';
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>

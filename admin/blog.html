@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion Blog - Admin</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .admin-sidebar {
+            position: fixed;
+            left: 0;
+            top: 70px;
+            width: 250px;
+            height: calc(100vh - 70px);
+            background: var(--text-dark);
+            color: white;
+            padding: 2rem 0;
+            overflow-y: auto;
+        }
+
+        .admin-content {
+            margin-left: 250px;
+            padding: 2rem;
+            min-height: calc(100vh - 70px);
+            padding-top: 100px;
+        }
+
+        .admin-sidebar-menu {
+            list-style: none;
+            padding: 0;
+        }
+
+        .admin-sidebar-menu li {
+            margin-bottom: 0.5rem;
+        }
+
+        .admin-sidebar-menu a {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1.5rem;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: all var(--transition-fast);
+        }
+
+        .admin-sidebar-menu a:hover,
+        .admin-sidebar-menu a.active {
+            background: var(--cosmic-purple);
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <div class="navbar-logo">⭐ Admin - Gestion Blog</div>
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <button id="logoutBtn" class="btn btn-secondary" style="padding: 0.5rem 1rem;">
+                    Déconnexion
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <aside class="admin-sidebar">
+        <ul class="admin-sidebar-menu">
+            <li><a href="index.html">
+                    <span>📊</span> Tableau de Bord
+                </a></li>
+            <li><a href="modules.html">
+                    <span>📚</span> Gestion Modules
+                </a></li>
+            <li><a href="users.html">
+                    <span>👥</span> Utilisateurs
+                </a></li>
+            <li><a href="consultations.html">
+                    <span>📹</span> Consultations
+                </a></li>
+            <li><a href="leads.html">
+                    <span>📧</span> Leads
+                </a></li>
+            <li><a href="payments.html">
+                    <span>💳</span> Paiements
+                </a></li>
+            <li><a href="blog.html" class="active">
+                    <span>✍️</span> Blog
+                </a></li>
+            <li><a href="settings.html">
+                    <span>⚙️</span> Paramètres
+                </a></li>
+        </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="admin-content">
+        <div class="container-wide">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                <h1>Gestion du Blog</h1>
+                <button id="createPostBtn" class="btn btn-primary btn-large">
+                    ➕ Nouvel Article
+                </button>
+            </div>
+
+            <!-- Blog Stats -->
+            <div class="grid grid-4" style="margin-bottom: 2rem;">
+                <div class="card text-center">
+                    <div style="font-size: 2.5rem; color: var(--cosmic-purple); margin-bottom: 0.5rem;">0</div>
+                    <p style="font-weight: 600;">Articles Publiés</p>
+                </div>
+                <div class="card text-center">
+                    <div style="font-size: 2.5rem; color: var(--telluric-gold); margin-bottom: 0.5rem;">0</div>
+                    <p style="font-weight: 600;">Brouillons</p>
+                </div>
+                <div class="card text-center">
+                    <div style="font-size: 2.5rem; color: var(--peaceful-blue); margin-bottom: 0.5rem;">0</div>
+                    <p style="font-weight: 600;">Vues Totales</p>
+                </div>
+                <div class="card text-center">
+                    <div style="font-size: 2.5rem; color: var(--healing-green); margin-bottom: 0.5rem;">0</div>
+                    <p style="font-weight: 600;">Ce Mois</p>
+                </div>
+            </div>
+
+            <!-- SEO Strategy Reference -->
+            <div class="card"
+                style="margin-bottom: 2rem; background: linear-gradient(135deg, var(--cosmic-purple), var(--peaceful-blue)); color: white;">
+                <div style="padding: 2rem;">
+                    <h3 style="color: white; margin-bottom: 1rem;">📈 Stratégie SEO</h3>
+                    <p style="margin-bottom: 1rem; color: rgba(255,255,255,0.95);">
+                        Consultez la stratégie SEO complète pour créer du contenu optimisé
+                    </p>
+                    <div style="display: flex; gap: 1rem;">
+                        <a href="../seo-strategy.md" class="btn"
+                            style="background: white; color: var(--cosmic-purple);">
+                            📄 Voir la Stratégie
+                        </a>
+                        <a href="../blog/index.html" target="_blank" class="btn btn-secondary">
+                            🌐 Voir le Blog Public
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Articles Table -->
+            <div class="card">
+                <h3 style="padding: 1rem; border-bottom: 1px solid var(--gentle-gray);">Articles</h3>
+                <table style="width: 100%;">
+                    <thead>
+                        <tr style="background: var(--gentle-gray);">
+                            <th style="padding: 1rem; text-align: left;">Titre</th>
+                            <th style="padding: 1rem; text-align: left;">Catégorie</th>
+                            <th style="padding: 1rem; text-align: left;">Statut</th>
+                            <th style="padding: 1rem; text-align: left;">Date</th>
+                            <th style="padding: 1rem; text-align: left;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="5" style="text-align: center; padding: 3rem; color: var(--text-medium);">
+                                Aucun article créé
+                                <br><br>
+                                <small>Cliquez sur "Nouvel Article" pour commencer à créer du contenu SEO</small>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Content Ideas -->
+            <div class="card" style="margin-top: 2rem;">
+                <h3 style="padding: 1rem; border-bottom: 1px solid var(--gentle-gray);">💡 Idées d'Articles (Piliers
+                    SEO)</h3>
+                <div style="padding: 1.5rem;">
+                    <div class="grid grid-2">
+                        <div>
+                            <h4 style="color: var(--cosmic-purple); margin-bottom: 1rem;">Pilier 1: Troubles de
+                                l'Attention</h4>
+                            <ul style="line-height: 1.8;">
+                                <li>5 Signes de Troubles de l'Attention</li>
+                                <li>Exercices de Concentration par Âge</li>
+                                <li>Alimentation et Attention</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 style="color: var(--telluric-gold); margin-bottom: 1rem;">Pilier 2: Hyperactivité</h4>
+                            <ul style="line-height: 1.8;">
+                                <li>10 Techniques pour Calmer un Enfant</li>
+                                <li>Hyperactivité vs Énergie Normale</li>
+                                <li>Environnement Apaisant</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 style="color: var(--healing-green); margin-bottom: 1rem;">Pilier 3: Équilibre
+                                Énergétique</h4>
+                            <ul style="line-height: 1.8;">
+                                <li>Qu'est-ce que l'Équilibre Énergétique?</li>
+                                <li>Énergies Cosmiques et Telluriques</li>
+                                <li>5 Exercices Énergétiques Simples</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 style="color: var(--peaceful-blue); margin-bottom: 1rem;">Pilier 4: Solutions Naturelles
+                            </h4>
+                            <ul style="line-height: 1.8;">
+                                <li>Alternatives Naturelles aux Médicaments</li>
+                                <li>Méditation pour Enfants</li>
+                                <li>Routine du Soir Apaisante</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="../js/main.js"></script>
+    <script type="module">
+        import { auth } from '../firebase-config.js';
+        import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+        document.addEventListener('DOMContentLoaded', function () {
+            onAuthStateChanged(auth, async (user) => {
+                if (!user) {
+                    window.location.href = '../connexion.html';
+                }
+            });
+
+            const logoutBtn = document.getElementById('logoutBtn');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', async function () {
+                    await signOut(auth);
+                    window.location.href = '../index.html';
+                });
+            }
+
+            const createPostBtn = document.getElementById('createPostBtn');
+            if (createPostBtn) {
+                createPostBtn.addEventListener('click', function () {
+                    alert('Interface de création d\'article à venir!\nPour l\'instant, consultez la stratégie SEO pour planifier votre contenu.');
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>

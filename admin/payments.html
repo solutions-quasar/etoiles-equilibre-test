@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion Paiements - Admin</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .admin-sidebar {
+            position: fixed;
+            left: 0;
+            top: 70px;
+            width: 250px;
+            height: calc(100vh - 70px);
+            background: var(--text-dark);
+            color: white;
+            padding: 2rem 0;
+            overflow-y: auto;
+        }
+
+        .admin-content {
+            margin-left: 250px;
+            padding: 2rem;
+            min-height: calc(100vh - 70px);
+            padding-top: 100px;
+        }
+
+        .admin-sidebar-menu {
+            list-style: none;
+            padding: 0;
+        }
+
+        .admin-sidebar-menu li {
+            margin-bottom: 0.5rem;
+        }
+
+        .admin-sidebar-menu a {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1.5rem;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: all var(--transition-fast);
+        }
+
+        .admin-sidebar-menu a:hover,
+        .admin-sidebar-menu a.active {
+            background: var(--cosmic-purple);
+            color: white;
+        }
+
+        .payment-status {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: var(--radius-full);
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .status-completed {
+            background: var(--healing-green);
+            color: white;
+        }
+
+        .status-pending {
+            background: var(--telluric-gold);
+            color: white;
+        }
+
+        .status-failed {
+            background: #e74c3c;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <div class="navbar-logo">⭐ Admin - Gestion Paiements</div>
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <button id="logoutBtn" class="btn btn-secondary" style="padding: 0.5rem 1rem;">
+                    Déconnexion
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <aside class="admin-sidebar">
+        <ul class="admin-sidebar-menu">
+            <li><a href="index.html">
+                    <span>📊</span> Tableau de Bord
+                </a></li>
+            <li><a href="modules.html">
+                    <span>📚</span> Gestion Modules
+                </a></li>
+            <li><a href="users.html">
+                    <span>👥</span> Utilisateurs
+                </a></li>
+            <li><a href="consultations.html">
+                    <span>📹</span> Consultations
+                </a></li>
+            <li><a href="leads.html">
+                    <span>📧</span> Leads
+                </a></li>
+            <li><a href="payments.html" class="active">
+                    <span>💳</span> Paiements
+                </a></li>
+            <li><a href="blog.html">
+                    <span>✍️</span> Blog
+                </a></li>
+            <li><a href="settings.html">
+                    <span>⚙️</span> Paramètres
+                </a></li>
+        </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="admin-content">
+        <div class="container-wide">
+            <h1 style="margin-bottom: 2rem;">Gestion des Paiements</h1>
+
+            <!-- Revenue Stats -->
+            <div class="grid grid-4" style="margin-bottom: 2rem;">
+                <div class="card text-center">
+                    <div style="font-size: 2.5rem; color: var(--healing-green); margin-bottom: 0.5rem;"
+                        id="totalRevenue">0€</div>
+                    <p style="font-weight: 600;">Revenu Total</p>
+                </div>
+                <div class="card text-center">
+                    <div style="font-size: 2.5rem; color: var(--cosmic-purple); margin-bottom: 0.5rem;"
+                        id="thisMonthRevenue">0€</div>
+                    <p style="font-weight: 600;">Ce Mois</p>
+                </div>
+                <div class="card text-center">
+                    <div style="font-size: 2.5rem; color: var(--peaceful-blue); margin-bottom: 0.5rem;"
+                        id="completedPayments">0</div>
+                    <p style="font-weight: 600;">Paiements Réussis</p>
+                </div>
+                <div class="card text-center">
+                    <div style="font-size: 2.5rem; color: var(--telluric-gold); margin-bottom: 0.5rem;"
+                        id="pendingPayments">0</div>
+                    <p style="font-weight: 600;">En Attente</p>
+                </div>
+            </div>
+
+            <!-- Payments Table -->
+            <div class="card">
+                <h3 style="padding: 1rem; border-bottom: 1px solid var(--gentle-gray);">Transactions Récentes</h3>
+                <table style="width: 100%;">
+                    <thead>
+                        <tr style="background: var(--gentle-gray);">
+                            <th style="padding: 1rem; text-align: left;">Date</th>
+                            <th style="padding: 1rem; text-align: left;">Client</th>
+                            <th style="padding: 1rem; text-align: left;">Type</th>
+                            <th style="padding: 1rem; text-align: left;">Montant</th>
+                            <th style="padding: 1rem; text-align: left;">Statut</th>
+                            <th style="padding: 1rem; text-align: left;">ID Stripe</th>
+                        </tr>
+                    </thead>
+                    <tbody id="paymentsList">
+                        <tr>
+                            <td colspan="6" style="text-align: center; padding: 3rem; color: var(--text-medium);">
+                                Aucun paiement enregistré
+                                <br><br>
+                                <small>Les paiements apparaîtront ici une fois l'intégration Stripe configurée</small>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Stripe Integration Notice -->
+            <div class="card"
+                style="margin-top: 2rem; background: linear-gradient(135deg, var(--cosmic-purple), var(--telluric-gold)); color: white;">
+                <div style="padding: 2rem;">
+                    <h3 style="color: white; margin-bottom: 1rem;">💳 Intégration Stripe</h3>
+                    <p style="margin-bottom: 1rem; color: rgba(255,255,255,0.95);">
+                        Pour activer les paiements, vous devez configurer Stripe :
+                    </p>
+                    <ol style="color: rgba(255,255,255,0.95); line-height: 1.8;">
+                        <li>Créer un compte Stripe (stripe.com)</li>
+                        <li>Obtenir vos clés API (test et production)</li>
+                        <li>Configurer les webhooks Stripe</li>
+                        <li>Intégrer Stripe Checkout dans le code</li>
+                    </ol>
+                    <a href="https://stripe.com/docs" target="_blank" class="btn"
+                        style="background: white; color: var(--cosmic-purple); margin-top: 1rem;">
+                        📚 Documentation Stripe
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="../js/main.js"></script>
+    <script type="module">
+        import { auth } from '../firebase-config.js';
+        import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+        document.addEventListener('DOMContentLoaded', function () {
+            onAuthStateChanged(auth, async (user) => {
+                if (!user) {
+                    window.location.href = '../connexion.html';
+                }
+            });
+
+            const logoutBtn = document.getElementById('logoutBtn');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', async function () {
+                    await signOut(auth);
+                    window.location.href = '../index.html';
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>

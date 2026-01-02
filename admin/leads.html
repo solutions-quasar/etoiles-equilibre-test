@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion Leads - Admin</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .admin-sidebar {
+            position: fixed;
+            left: 0;
+            top: 70px;
+            width: 250px;
+            height: calc(100vh - 70px);
+            background: var(--text-dark);
+            color: white;
+            padding: 2rem 0;
+            overflow-y: auto;
+        }
+
+        .admin-content {
+            margin-left: 250px;
+            padding: 2rem;
+            min-height: calc(100vh - 70px);
+            padding-top: 100px;
+        }
+
+        .admin-sidebar-menu {
+            list-style: none;
+            padding: 0;
+        }
+
+        .admin-sidebar-menu li {
+            margin-bottom: 0.5rem;
+        }
+
+        .admin-sidebar-menu a {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1.5rem;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: all var(--transition-fast);
+        }
+
+        .admin-sidebar-menu a:hover,
+        .admin-sidebar-menu a.active {
+            background: var(--cosmic-purple);
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <div class="navbar-logo">⭐ Admin - Gestion Leads</div>
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <button id="logoutBtn" class="btn btn-secondary" style="padding: 0.5rem 1rem;">
+                    Déconnexion
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <aside class="admin-sidebar">
+        <ul class="admin-sidebar-menu">
+            <li><a href="index.html">
+                    <span>📊</span> Tableau de Bord
+                </a></li>
+            <li><a href="modules.html">
+                    <span>📚</span> Gestion Modules
+                </a></li>
+            <li><a href="users.html">
+                    <span>👥</span> Utilisateurs
+                </a></li>
+            <li><a href="consultations.html">
+                    <span>📹</span> Consultations
+                </a></li>
+            <li><a href="leads.html" class="active">
+                    <span>📧</span> Leads
+                </a></li>
+            <li><a href="payments.html">
+                    <span>💳</span> Paiements
+                </a></li>
+            <li><a href="blog.html">
+                    <span>✍️</span> Blog
+                </a></li>
+            <li><a href="settings.html">
+                    <span>⚙️</span> Paramètres
+                </a></li>
+        </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="admin-content">
+        <div class="container-wide">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                <h1>Gestion des Leads</h1>
+                <button id="exportLeadsBtn" class="btn btn-secondary">
+                    📥 Exporter en CSV
+                </button>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="grid grid-4" style="margin-bottom: 2rem;">
+                <div class="card text-center">
+                    <div style="font-size: 2.5rem; color: var(--cosmic-purple); margin-bottom: 0.5rem;" id="totalLeads">
+                        0</div>
+                    <p style="font-weight: 600;">Total Leads</p>
+                </div>
+                <div class="card text-center">
+                    <div style="font-size: 2.5rem; color: var(--telluric-gold); margin-bottom: 0.5rem;"
+                        id="thisWeekLeads">0</div>
+                    <p style="font-weight: 600;">Cette Semaine</p>
+                </div>
+                <div class="card text-center">
+                    <div style="font-size: 2.5rem; color: var(--healing-green); margin-bottom: 0.5rem;"
+                        id="convertedLeads">0</div>
+                    <p style="font-weight: 600;">Convertis</p>
+                </div>
+                <div class="card text-center">
+                    <div style="font-size: 2.5rem; color: var(--peaceful-blue); margin-bottom: 0.5rem;"
+                        id="conversionRate">0%</div>
+                    <p style="font-weight: 600;">Taux Conversion</p>
+                </div>
+            </div>
+
+            <!-- Leads Table -->
+            <div class="card">
+                <table style="width: 100%;">
+                    <thead>
+                        <tr style="background: var(--gentle-gray);">
+                            <th style="padding: 1rem; text-align: left;">Prénom</th>
+                            <th style="padding: 1rem; text-align: left;">Email</th>
+                            <th style="padding: 1rem; text-align: left;">Source</th>
+                            <th style="padding: 1rem; text-align: left;">Date</th>
+                            <th style="padding: 1rem; text-align: left;">E-book Envoyé</th>
+                            <th style="padding: 1rem; text-align: left;">Converti</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leadsList">
+                        <tr>
+                            <td colspan="6" style="text-align: center; padding: 3rem; color: var(--text-medium);">
+                                Chargement des leads...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <script src="../js/main.js"></script>
+    <script type="module" src="../js/admin-leads.js"></script>
+</body>
+
+</html>
