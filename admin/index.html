@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Étoiles d'Équilibre</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .admin-sidebar {
+            position: fixed;
+            left: 0;
+            top: 70px;
+            width: 250px;
+            height: calc(100vh - 70px);
+            background: var(--text-dark);
+            color: white;
+            padding: 2rem 0;
+            overflow-y: auto;
+        }
+
+        .admin-content {
+            margin-left: 250px;
+            padding: 2rem;
+            min-height: calc(100vh - 70px);
+            padding-top: 100px;
+        }
+
+        .admin-sidebar-menu {
+            list-style: none;
+            padding: 0;
+        }
+
+        .admin-sidebar-menu li {
+            margin-bottom: 0.5rem;
+        }
+
+        .admin-sidebar-menu a {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1.5rem;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: all var(--transition-fast);
+        }
+
+        .admin-sidebar-menu a:hover,
+        .admin-sidebar-menu a.active {
+            background: var(--cosmic-purple);
+            color: white;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: var(--radius-md);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-md);
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .data-table {
+            width: 100%;
+            background: white;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+        }
+
+        .data-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table th {
+            background: var(--gradient-cosmic-telluric);
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .data-table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--gentle-gray);
+        }
+
+        .data-table tr:hover {
+            background: var(--gentle-gray);
+        }
+
+        .action-btn {
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-sm);
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all var(--transition-fast);
+        }
+
+        .action-btn-edit {
+            background: var(--peaceful-blue);
+            color: white;
+        }
+
+        .action-btn-delete {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <div class="navbar-logo">⭐ Admin - Étoiles d'Équilibre</div>
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <span id="adminGreeting" style="color: var(--text-dark); font-weight: 500;"></span>
+                <button id="logoutBtn" class="btn btn-secondary" style="padding: 0.5rem 1rem;">
+                    Déconnexion
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <aside class="admin-sidebar">
+        <ul class="admin-sidebar-menu">
+            <li><a href="index.html" class="active">
+                    <span>📊</span> Tableau de Bord
+                </a></li>
+            <li><a href="modules.html">
+                    <span>📚</span> Gestion Modules
+                </a></li>
+            <li><a href="users.html">
+                    <span>👥</span> Utilisateurs
+                </a></li>
+            <li><a href="consultations.html">
+                    <span>📹</span> Consultations
+                </a></li>
+            <li><a href="leads.html">
+                    <span>📧</span> Leads
+                </a></li>
+            <li><a href="payments.html">
+                    <span>💳</span> Paiements
+                </a></li>
+            <li><a href="blog.html">
+                    <span>✍️</span> Blog
+                </a></li>
+            <li><a href="settings.html">
+                    <span>⚙️</span> Paramètres
+                </a></li>
+        </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="admin-content">
+        <div class="container-wide">
+            <h1 style="margin-bottom: 2rem;">Tableau de Bord Administrateur</h1>
+
+            <!-- Stats Grid -->
+            <div class="grid grid-4" style="margin-bottom: 3rem;">
+                <div class="stat-card">
+                    <div class="stat-number" style="color: var(--cosmic-purple);" id="totalUsers">0</div>
+                    <p style="font-weight: 600; color: var(--text-dark);">Utilisateurs</p>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-number" style="color: var(--telluric-gold);" id="totalModules">0</div>
+                    <p style="font-weight: 600; color: var(--text-dark);">Modules</p>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-number" style="color: var(--healing-green);" id="totalConsultations">0</div>
+                    <p style="font-weight: 600; color: var(--text-dark);">Consultations</p>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-number" style="color: var(--peaceful-blue);" id="totalLeads">0</div>
+                    <p style="font-weight: 600; color: var(--text-dark);">Leads</p>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div style="margin-bottom: 3rem;">
+                <h2 style="margin-bottom: 1.5rem;">Activité Récente</h2>
+                <div class="data-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Type</th>
+                                <th>Description</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recentActivity">
+                            <tr>
+                                <td colspan="3" style="text-align: center; color: var(--text-medium); padding: 2rem;">
+                                    Chargement...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div>
+                <h2 style="margin-bottom: 1.5rem;">Actions Rapides</h2>
+                <div class="grid grid-3">
+                    <a href="modules.html?action=create" class="card"
+                        style="text-align: center; padding: 2rem; cursor: pointer; text-decoration: none;">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">➕</div>
+                        <h4 style="color: var(--cosmic-purple);">Créer un Module</h4>
+                        <p style="color: var(--text-medium);">Ajouter un nouveau module de formation</p>
+                    </a>
+
+                    <a href="consultations.html?action=schedule" class="card"
+                        style="text-align: center; padding: 2rem; cursor: pointer; text-decoration: none;">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">📅</div>
+                        <h4 style="color: var(--cosmic-purple);">Planifier Consultation</h4>
+                        <p style="color: var(--text-medium);">Créer un nouveau créneau</p>
+                    </a>
+
+                    <a href="blog.html?action=create" class="card"
+                        style="text-align: center; padding: 2rem; cursor: pointer; text-decoration: none;">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">✍️</div>
+                        <h4 style="color: var(--cosmic-purple);">Écrire un Article</h4>
+                        <p style="color: var(--text-medium);">Publier un nouvel article de blog</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="../js/main.js"></script>
+    <script type="module" src="../js/admin.js"></script>
+</body>
+
+</html>

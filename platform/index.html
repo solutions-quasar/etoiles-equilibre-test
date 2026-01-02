@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Votre espace client Étoiles d'Équilibre. Accédez à vos modules, consultations et ressources.">
+    <title>Ma Plateforme - Étoiles d'Équilibre</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .platform-sidebar {
+            position: fixed;
+            left: 0;
+            top: 70px;
+            width: 250px;
+            height: calc(100vh - 70px);
+            background: white;
+            border-right: 1px solid var(--gentle-gray);
+            padding: 2rem 0;
+            overflow-y: auto;
+        }
+
+        .platform-content {
+            margin-left: 250px;
+            padding: 2rem;
+            min-height: calc(100vh - 70px);
+            padding-top: 100px;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1.5rem;
+            color: var(--text-dark);
+            text-decoration: none;
+            transition: all var(--transition-fast);
+        }
+
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background: var(--gradient-cosmic-telluric);
+            color: white;
+        }
+
+        .module-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: var(--radius-full);
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .badge-free {
+            background: var(--healing-green);
+            color: white;
+        }
+
+        .badge-paid {
+            background: var(--telluric-gold);
+            color: white;
+        }
+
+        .badge-locked {
+            background: var(--gentle-gray);
+            color: var(--text-medium);
+        }
+
+        @media (max-width: 768px) {
+            .platform-sidebar {
+                transform: translateX(-100%);
+                transition: transform var(--transition-medium);
+                z-index: 999;
+            }
+
+            .platform-sidebar.active {
+                transform: translateX(0);
+            }
+
+            .platform-content {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <div class="navbar-logo">⭐ Étoiles d'Équilibre</div>
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <span id="userGreeting" style="color: var(--text-dark); font-weight: 500;"></span>
+                <button id="logoutBtn" class="btn btn-secondary" style="padding: 0.5rem 1rem;">
+                    Déconnexion
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <aside class="platform-sidebar" id="sidebar">
+        <ul class="sidebar-menu">
+            <li><a href="index.html" class="active">
+                    <span>🏠</span> Tableau de Bord
+                </a></li>
+            <li><a href="modules.html">
+                    <span>📚</span> Mes Modules
+                </a></li>
+            <li><a href="consultations.html">
+                    <span>📹</span> Consultations
+                </a></li>
+            <li><a href="progress.html">
+                    <span>📊</span> Mes Progrès
+                </a></li>
+            <li><a href="resources.html">
+                    <span>📥</span> Ressources
+                </a></li>
+            <li><a href="profile.html">
+                    <span>⚙️</span> Mon Profil
+                </a></li>
+        </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="platform-content">
+        <div class="container-wide">
+            <!-- Welcome Section -->
+            <div class="card"
+                style="background: var(--gradient-cosmic-telluric); color: white; padding: 3rem; margin-bottom: 2rem;">
+                <h1 style="color: white; margin-bottom: 1rem;" id="welcomeTitle">Bienvenue !</h1>
+                <p style="font-size: 1.25rem; color: rgba(255,255,255,0.95);">
+                    Votre espace personnel pour accompagner votre enfant vers l'équilibre énergétique
+                </p>
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="grid grid-4" style="margin-bottom: 3rem;">
+                <div class="card text-center">
+                    <div style="font-size: 2.5rem; color: var(--cosmic-purple); margin-bottom: 0.5rem;"
+                        id="modulesCount">0</div>
+                    <p style="font-weight: 600; color: var(--text-dark);">Modules Actifs</p>
+                </div>
+
+                <div class="card text-center">
+                    <div style="font-size: 2.5rem; color: var(--telluric-gold); margin-bottom: 0.5rem;"
+                        id="consultationsCount">0</div>
+                    <p style="font-weight: 600; color: var(--text-dark);">Consultations</p>
+                </div>
+
+                <div class="card text-center">
+                    <div style="font-size: 2.5rem; color: var(--healing-green); margin-bottom: 0.5rem;"
+                        id="progressPercent">0%</div>
+                    <p style="font-weight: 600; color: var(--text-dark);">Progression</p>
+                </div>
+
+                <div class="card text-center">
+                    <div style="font-size: 2.5rem; color: var(--peaceful-blue); margin-bottom: 0.5rem;" id="daysActive">
+                        0</div>
+                    <p style="font-weight: 600; color: var(--text-dark);">Jours Actifs</p>
+                </div>
+            </div>
+
+            <!-- Featured Modules -->
+            <div style="margin-bottom: 3rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                    <h2>Modules Recommandés</h2>
+                    <a href="modules.html" class="btn btn-secondary">Voir tous</a>
+                </div>
+
+                <div class="grid grid-3" id="featuredModules">
+                    <!-- Modules will be loaded dynamically -->
+                    <div class="card">
+                        <div style="text-align: center; padding: 2rem;">
+                            <div style="font-size: 3rem; margin-bottom: 1rem;">⏳</div>
+                            <p style="color: var(--text-medium);">Chargement des modules...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Upcoming Consultations -->
+            <div style="margin-bottom: 3rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                    <h2>Prochaines Consultations</h2>
+                    <a href="consultations.html" class="btn btn-secondary">Réserver</a>
+                </div>
+
+                <div id="upcomingConsultations">
+                    <div class="card">
+                        <p style="text-align: center; color: var(--text-medium); padding: 2rem;">
+                            Aucune consultation programmée. <a href="consultations.html"
+                                style="color: var(--cosmic-purple);">Réserver maintenant</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div>
+                <h2 style="margin-bottom: 1.5rem;">Activité Récente</h2>
+
+                <div class="card" id="recentActivity">
+                    <div style="padding: 2rem; text-align: center; color: var(--text-medium);">
+                        Aucune activité récente
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="../js/main.js"></script>
+    <script type="module" src="../js/platform.js"></script>
+</body>
+
+</html>

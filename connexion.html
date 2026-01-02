@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Connexion à votre espace client Étoiles d'Équilibre. Accédez à vos modules, consultations et ressources personnalisées.">
+    <title>Connexion - Étoiles d'Équilibre</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <div class="navbar-logo">⭐ Étoiles d'Équilibre</div>
+            <button class="navbar-toggle" id="navToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="navbar-menu" id="navMenu">
+                <li><a href="index.html" class="navbar-link">Accueil</a></li>
+                <li><a href="comment-ca-marche.html" class="navbar-link">Comment ça marche</a></li>
+                <li><a href="ebook-gratuit.html" class="navbar-link">E-book Gratuit</a></li>
+                <li><a href="blog/index.html" class="navbar-link">Blog</a></li>
+                <li><a href="connexion.html" class="navbar-link">Connexion</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Login Section -->
+    <section class="section" style="padding-top: 120px; min-height: 100vh; background: var(--gradient-earth-sky);">
+        <div class="container">
+            <div class="grid grid-2" style="align-items: center; gap: 3rem; max-width: 1000px; margin: 0 auto;">
+                <!-- Left Side - Info -->
+                <div style="color: white;">
+                    <h1 style="color: white; margin-bottom: 1.5rem;">
+                        Bienvenue sur Votre Espace Client
+                    </h1>
+                    <p style="font-size: 1.25rem; margin-bottom: 2rem; color: rgba(255,255,255,0.95);">
+                        Accédez à vos modules personnalisés, réservez vos consultations et suivez
+                        les progrès de votre enfant.
+                    </p>
+
+                    <div
+                        style="background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); padding: 2rem; border-radius: var(--radius-md); margin-bottom: 2rem;">
+                        <h3 style="color: white; margin-bottom: 1rem;">✨ Votre Plateforme Inclut :</h3>
+                        <ul style="list-style: none; padding: 0;">
+                            <li
+                                style="margin-bottom: 1rem; padding-left: 2rem; position: relative; color: rgba(255,255,255,0.95);">
+                                <span style="position: absolute; left: 0;">📚</span>
+                                Modules gratuits et payants
+                            </li>
+                            <li
+                                style="margin-bottom: 1rem; padding-left: 2rem; position: relative; color: rgba(255,255,255,0.95);">
+                                <span style="position: absolute; left: 0;">📹</span>
+                                Vidéos et ressources téléchargeables
+                            </li>
+                            <li
+                                style="margin-bottom: 1rem; padding-left: 2rem; position: relative; color: rgba(255,255,255,0.95);">
+                                <span style="position: absolute; left: 0;">📅</span>
+                                Réservation de consultations
+                            </li>
+                            <li
+                                style="margin-bottom: 1rem; padding-left: 2rem; position: relative; color: rgba(255,255,255,0.95);">
+                                <span style="position: absolute; left: 0;">📊</span>
+                                Suivi des progrès personnalisé
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Right Side - Login/Register Forms -->
+                <div>
+                    <div class="card" style="padding: 2.5rem;">
+                        <!-- Tabs -->
+                        <div
+                            style="display: flex; gap: 1rem; margin-bottom: 2rem; border-bottom: 2px solid var(--gentle-gray);">
+                            <button id="loginTab" class="auth-tab active"
+                                style="flex: 1; padding: 1rem; background: none; border: none; border-bottom: 3px solid var(--cosmic-purple); font-weight: 600; color: var(--cosmic-purple); cursor: pointer; transition: all 0.3s;">
+                                Connexion
+                            </button>
+                            <button id="registerTab" class="auth-tab"
+                                style="flex: 1; padding: 1rem; background: none; border: none; border-bottom: 3px solid transparent; font-weight: 600; color: var(--text-medium); cursor: pointer; transition: all 0.3s;">
+                                Inscription
+                            </button>
+                        </div>
+
+                        <!-- Login Form -->
+                        <form id="loginForm" class="auth-form">
+                            <h3 style="color: var(--cosmic-purple); margin-bottom: 1.5rem;">Se Connecter</h3>
+
+                            <div class="form-group">
+                                <label class="form-label">Email</label>
+                                <input type="email" id="loginEmail" class="form-input" placeholder="votre@email.com"
+                                    required>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Mot de passe</label>
+                                <input type="password" id="loginPassword" class="form-input" placeholder="••••••••"
+                                    required>
+                            </div>
+
+                            <div style="text-align: right; margin-bottom: 1.5rem;">
+                                <a href="#" id="forgotPassword" style="font-size: 0.9rem; color: var(--cosmic-purple);">
+                                    Mot de passe oublié ?
+                                </a>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary" style="width: 100%; font-size: 1.125rem;">
+                                Se Connecter
+                            </button>
+                        </form>
+
+                        <!-- Register Form -->
+                        <form id="registerForm" class="auth-form" style="display: none;">
+                            <h3 style="color: var(--cosmic-purple); margin-bottom: 1.5rem;">Créer un Compte</h3>
+
+                            <div class="form-group">
+                                <label class="form-label">Prénom</label>
+                                <input type="text" id="registerFirstName" class="form-input" placeholder="Votre prénom"
+                                    required>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Nom</label>
+                                <input type="text" id="registerLastName" class="form-input" placeholder="Votre nom"
+                                    required>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Email</label>
+                                <input type="email" id="registerEmail" class="form-input" placeholder="votre@email.com"
+                                    required>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Mot de passe</label>
+                                <input type="password" id="registerPassword" class="form-input"
+                                    placeholder="Minimum 6 caractères" required minlength="6">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Confirmer le mot de passe</label>
+                                <input type="password" id="registerPasswordConfirm" class="form-input"
+                                    placeholder="Confirmez votre mot de passe" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label style="display: flex; align-items: flex-start; gap: 0.5rem; cursor: pointer;">
+                                    <input type="checkbox" id="registerTerms" required style="margin-top: 0.25rem;">
+                                    <span style="font-size: 0.9rem; color: var(--text-medium);">
+                                        J'accepte les <a href="#" style="color: var(--cosmic-purple);">conditions
+                                            d'utilisation</a>
+                                        et la <a href="#" style="color: var(--cosmic-purple);">politique de
+                                            confidentialité</a>
+                                    </span>
+                                </label>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary" style="width: 100%; font-size: 1.125rem;">
+                                Créer mon Compte
+                            </button>
+                        </form>
+
+                        <div
+                            style="text-align: center; margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--gentle-gray);">
+                            <p style="font-size: 0.9rem; color: var(--text-medium);">
+                                Besoin d'aide ? <a href="mailto:contact@etoiles-equilibre.com"
+                                    style="color: var(--cosmic-purple);">Contactez-nous</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>⭐ Étoiles d'Équilibre</h4>
+                    <p>Accompagnement énergétique bienveillant pour le bien-être des enfants</p>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Navigation</h4>
+                    <p><a href="index.html">Accueil</a></p>
+                    <p><a href="comment-ca-marche.html">Comment ça marche</a></p>
+                    <p><a href="ebook-gratuit.html">E-book Gratuit</a></p>
+                    <p><a href="blog/index.html">Blog</a></p>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Ressources</h4>
+                    <p><a href="connexion.html">Connexion Client</a></p>
+                    <p><a href="#">Mentions Légales</a></p>
+                    <p><a href="#">Politique de Confidentialité</a></p>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Contact</h4>
+                    <p>Email: contact@etoiles-equilibre.com</p>
+                    <p>Consultations sur rendez-vous</p>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2026 Étoiles d'Équilibre. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script type="module" src="js/auth.js"></script>
+</body>
+
+</html>
