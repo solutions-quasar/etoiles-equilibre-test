@@ -6,7 +6,7 @@ import {
     sendPasswordResetEmail,
     onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { doc, setDoc, getDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 document.addEventListener('DOMContentLoaded', function () {
     // Tab Switching
@@ -51,17 +51,29 @@ document.addEventListener('DOMContentLoaded', function () {
 
         try {
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
-            showNotification('✅ Connexion réussie !', 'success');
+            const user = userCredential.user;
 
-            // Redirect based on user role
-            setTimeout(() => {
-                // Check if admin
-                if (email === 'admin@etoiles-equilibre.com') {
-                    window.location.href = 'admin/index.html';
-                } else {
-                    window.location.href = 'platform/index.html';
-                }
-            }, 1000);
+            // Fetch user profile from Firestore to check role
+            const userDoc = await getDoc(doc(db, 'users', user.uid));
+
+            if (userDoc.exists()) {
+                const userData = userDoc.data();
+                showNotification('✅ Connexion réussie !', 'success');
+
+                // Redirect based on user role from Firestore
+                setTimeout(() => {
+                    if (userData.role === 'admin') {
+                        window.location.href = 'admin/index.html';
+                    } else {
+                        window.location.href = 'platform/index.html';
+                    }
+                }, 1000);
+            } else {
+                // User document doesn't exist in Firestore
+                showNotification('Profil utilisateur introuvable. Contactez le support.', 'error');
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalText;
+            }
 
         } catch (error) {
             console.error('Login error:', error);
