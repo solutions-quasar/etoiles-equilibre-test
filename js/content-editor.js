@@ -1,4 +1,7 @@
-// Rich Content Editor for Modules
+// Rich Content Editor for Modules with Firebase Storage Upload
+import { storage } from '../firebase-config.js';
+import { ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
+
 let contentBlocks = [];
 let blockIdCounter = 0;
 
@@ -29,7 +32,7 @@ function addBlock(type) {
     setTimeout(() => {
         const blockElement = document.getElementById(block.id);
         if (blockElement) {
-            const input = blockElement.querySelector('textarea, input');
+            const input = blockElement.querySelector('textarea, input[type="url"]');
             if (input) input.focus();
         }
     }, 100);
@@ -57,6 +60,7 @@ function renderBlocks() {
     });
 
     initDragAndDrop();
+    initFileUploads();
 }
 
 // Create a block element
@@ -66,6 +70,7 @@ function createBlockElement(block, index) {
     div.id = block.id;
     div.draggable = true;
     div.dataset.index = index;
+    div.dataset.blockId = block.id;
 
     const typeIcons = {
         text: '📝',
@@ -99,10 +104,20 @@ function createBlockElement(block, index) {
         </div>
     `;
 
-    // Add event listeners for content changes
-    const contentInput = div.querySelector('textarea, input');
-    if (contentInput) {
-        contentInput.addEventListener('input', (e) => {
+    // Add event listeners for URL input changes
+    const urlInput = div.querySelector('input[type="url"]');
+    if (urlInput) {
+        urlInput.addEventListener('input', (e) => {
+            block.content = e.target.value;
+            // Re-render to show preview
+            setTimeout(() => renderBlocks(), 500);
+        });
+    }
+
+    // Add event listeners for textarea changes
+    const textarea = div.querySelector('textarea');
+    if (textarea) {
+        textarea.addEventListener('input', (e) => {
             block.content = e.target.value;
         });
     }
@@ -124,42 +139,196 @@ function getBlockContentHTML(block) {
             `;
         case 'image':
             return `
-                <input 
-                    type="url" 
-                    class="form-input" 
-                    placeholder="URL de l'image (https://...)"
-                    value="${block.content || ''}"
-                    style="width: 100%; margin-bottom: 0.5rem;"
-                >
+                <div style="margin-bottom: 1rem;">
+                    <div style="display: flex; gap: 0.5rem; margin-bottom: 0.5rem;">
+                        <input 
+                            type="url" 
+                            class="form-input image-url-input" 
+                            placeholder="URL de l'image (https://...)"
+                            value="${block.content || ''}"
+                            style="flex: 1;"
+                        >
+                        <label class="btn btn-secondary" style="padding: 0.5rem 1rem; margin: 0; cursor: pointer; white-space: nowrap;">
+                            📤 Upload
+                            <input 
+                                type="file" 
+                                accept="image/*" 
+                                class="image-file-input"
+                                style="display: none;"
+                                data-block-id="${block.id}"
+                            >
+                        </label>
+                    </div>
+                    <div class="upload-progress" style="display: none; margin-bottom: 0.5rem;">
+                        <div style="background: var(--gentle-gray); border-radius: var(--radius-full); height: 8px; overflow: hidden;">
+                            <div class="progress-bar" style="background: var(--cosmic-purple); height: 100%; width: 0%; transition: width 0.3s;"></div>
+                        </div>
+                        <p style="font-size: 0.875rem; color: var(--text-medium); margin-top: 0.25rem; text-align: center;">Upload en cours...</p>
+                    </div>
+                </div>
                 ${block.content ? `<img src="${block.content}" style="max-width: 100%; border-radius: var(--radius-md); margin-top: 0.5rem;" onerror="this.style.display='none'">` : ''}
                 <p style="font-size: 0.875rem; color: var(--text-medium); margin-top: 0.5rem;">
-                    💡 Astuce: Uploadez votre image sur Firebase Storage et collez l'URL ici
+                    💡 Uploadez une image (JPG, PNG, WebP) ou collez une URL
                 </p>
             `;
         case 'video':
             return `
-                <input 
-                    type="url" 
-                    class="form-input" 
-                    placeholder="URL de la vidéo YouTube ou Vimeo"
-                    value="${block.content || ''}"
-                    style="width: 100%; margin-bottom: 0.5rem;"
-                >
-                ${block.content ? `
-                    <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; margin-top: 0.5rem;">
-                        <iframe 
-                            src="${getEmbedUrl(block.content)}" 
-                            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; border-radius: var(--radius-md);"
-                            allowfullscreen
-                        ></iframe>
+                <div style="margin-bottom: 1rem;">
+                    <div style="display: flex; gap: 0.5rem; margin-bottom: 0.5rem;">
+                        <input 
+                            type="url" 
+                            class="form-input video-url-input" 
+                            placeholder="URL de la vidéo YouTube, Vimeo ou MP4"
+                            value="${block.content || ''}"
+                            style="flex: 1;"
+                        >
+                        <label class="btn btn-secondary" style="padding: 0.5rem 1rem; margin: 0; cursor: pointer; white-space: nowrap;">
+                            📤 Upload
+                            <input 
+                                type="file" 
+                                accept="video/*" 
+                                class="video-file-input"
+                                style="display: none;"
+                                data-block-id="${block.id}"
+                            >
+                        </label>
                     </div>
-                ` : ''}
+                    <div class="upload-progress" style="display: none; margin-bottom: 0.5rem;">
+                        <div style="background: var(--gentle-gray); border-radius: var(--radius-full); height: 8px; overflow: hidden;">
+                            <div class="progress-bar" style="background: var(--cosmic-purple); height: 100%; width: 0%; transition: width 0.3s;"></div>
+                        </div>
+                        <p style="font-size: 0.875rem; color: var(--text-medium); margin-top: 0.25rem; text-align: center;">Upload en cours...</p>
+                    </div>
+                </div>
+                ${block.content ? getVideoPreview(block.content) : ''}
                 <p style="font-size: 0.875rem; color: var(--text-medium); margin-top: 0.5rem;">
-                    💡 Formats supportés: YouTube, Vimeo, liens directs MP4
+                    💡 Uploadez une vidéo MP4 ou collez un lien YouTube/Vimeo
                 </p>
             `;
         default:
             return '';
+    }
+}
+
+// Get video preview HTML
+function getVideoPreview(url) {
+    const isDirectVideo = url.endsWith('.mp4') || url.endsWith('.webm') || url.endsWith('.mov');
+
+    return `
+        <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; margin-top: 0.5rem;">
+            ${isDirectVideo ? `
+                <video 
+                    controls 
+                    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: var(--radius-md);"
+                >
+                    <source src="${url}" type="video/mp4">
+                    Votre navigateur ne supporte pas la vidéo.
+                </video>
+            ` : `
+                <iframe 
+                    src="${getEmbedUrl(url)}" 
+                    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; border-radius: var(--radius-md);"
+                    allowfullscreen
+                ></iframe>
+            `}
+        </div>
+    `;
+}
+
+// Initialize file upload handlers
+function initFileUploads() {
+    // Image uploads
+    document.querySelectorAll('.image-file-input').forEach(input => {
+        input.addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const blockId = e.target.dataset.blockId;
+            await uploadFile(file, blockId, 'images');
+        });
+    });
+
+    // Video uploads
+    document.querySelectorAll('.video-file-input').forEach(input => {
+        input.addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const blockId = e.target.dataset.blockId;
+            await uploadFile(file, blockId, 'videos');
+        });
+    });
+}
+
+// Upload file to Firebase Storage
+async function uploadFile(file, blockId, folder) {
+    const block = contentBlocks.find(b => b.id === blockId);
+    if (!block) return;
+
+    const blockElement = document.getElementById(blockId);
+    if (!blockElement) return;
+
+    const progressContainer = blockElement.querySelector('.upload-progress');
+    const progressBar = blockElement.querySelector('.progress-bar');
+    const urlInput = blockElement.querySelector('input[type="url"]');
+
+    try {
+        // Show progress
+        if (progressContainer) progressContainer.style.display = 'block';
+        if (urlInput) urlInput.disabled = true;
+
+        // Create storage reference
+        const timestamp = Date.now();
+        const fileName = `${timestamp}_${file.name}`;
+        const storageRef = ref(storage, `modules/${folder}/${fileName}`);
+
+        // Upload file
+        const uploadTask = uploadBytesResumable(storageRef, file);
+
+        uploadTask.on('state_changed',
+            (snapshot) => {
+                // Progress
+                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                if (progressBar) {
+                    progressBar.style.width = progress + '%';
+                }
+            },
+            (error) => {
+                // Error
+                console.error('Upload error:', error);
+                alert('Erreur lors de l\'upload: ' + error.message);
+                if (progressContainer) progressContainer.style.display = 'none';
+                if (urlInput) urlInput.disabled = false;
+            },
+            async () => {
+                // Success
+                const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+
+                // Update block content
+                block.content = downloadURL;
+
+                // Update URL input
+                if (urlInput) {
+                    urlInput.value = downloadURL;
+                    urlInput.disabled = false;
+                }
+
+                // Hide progress
+                if (progressContainer) progressContainer.style.display = 'none';
+
+                // Re-render to show preview
+                renderBlocks();
+
+                // Show success notification
+                showNotification('✅ Fichier uploadé avec succès !', 'success');
+            }
+        );
+
+    } catch (error) {
+        console.error('Upload error:', error);
+        alert('Erreur lors de l\'upload: ' + error.message);
+        if (progressContainer) progressContainer.style.display = 'none';
+        if (urlInput) urlInput.disabled = false;
     }
 }
 
