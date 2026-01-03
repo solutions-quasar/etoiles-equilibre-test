@@ -8,10 +8,12 @@ import {
     updateDoc,
     deleteDoc,
     doc,
+    getDoc,
     serverTimestamp,
     orderBy,
     query
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { initContentEditor, getContentBlocks, setContentBlocks, clearContentBlocks } from './content-editor.js';
 
 let currentUser = null;
 
@@ -76,6 +78,9 @@ document.addEventListener('DOMContentLoaded', function () {
             modulePrice.disabled = false;
         }
     });
+
+    // Initialize content editor
+    initContentEditor();
 });
 
 async function loadModules() {
@@ -145,6 +150,7 @@ function openModal(moduleId = null) {
         modalTitle.textContent = 'Créer un Module';
         form.reset();
         document.getElementById('moduleId').value = '';
+        clearContentBlocks();
     }
 
     modal.classList.add('active');
@@ -154,6 +160,7 @@ function closeModal() {
     const modal = document.getElementById('moduleModal');
     modal.classList.remove('active');
     document.getElementById('moduleForm').reset();
+    clearContentBlocks();
 }
 
 async function loadModuleData(moduleId) {
@@ -165,7 +172,14 @@ async function loadModuleData(moduleId) {
             document.getElementById('moduleId').value = moduleId;
             document.getElementById('moduleTitle').value = module.title;
             document.getElementById('moduleDescription').value = module.description || '';
-            document.getElementById('moduleContent').value = module.content || '';
+
+            // Load content blocks if they exist, otherwise clear
+            if (module.contentBlocks && Array.isArray(module.contentBlocks)) {
+                setContentBlocks(module.contentBlocks);
+            } else {
+                clearContentBlocks();
+            }
+
             document.getElementById('moduleType').value = module.isFree ? 'free' : 'paid';
             document.getElementById('modulePrice').value = module.price || 0;
             document.getElementById('moduleCategory').value = module.category || '';
@@ -184,7 +198,6 @@ async function saveModule() {
     const moduleId = document.getElementById('moduleId').value;
     const title = document.getElementById('moduleTitle').value.trim();
     const description = document.getElementById('moduleDescription').value.trim();
-    const content = document.getElementById('moduleContent').value.trim();
     const type = document.getElementById('moduleType').value;
     const price = parseFloat(document.getElementById('modulePrice').value) || 0;
     const category = document.getElementById('moduleCategory').value.trim();
@@ -194,10 +207,18 @@ async function saveModule() {
     const order = parseInt(document.getElementById('moduleOrder').value) || 0;
     const published = document.getElementById('modulePublished').checked;
 
+    // Get content blocks from editor
+    const contentBlocks = getContentBlocks();
+
+    if (contentBlocks.length === 0) {
+        showNotification('⚠️ Veuillez ajouter du contenu au module', 'error');
+        return;
+    }
+
     const moduleData = {
         title,
         description,
-        content,
+        contentBlocks,  // Store structured content blocks
         isFree: type === 'free',
         price: type === 'free' ? 0 : price,
         category,
